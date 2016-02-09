@@ -1,13 +1,17 @@
 class docker {
     exec {['key']:
-        command => '/usr/bin/apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9',
+        command => '/usr/bin/apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D',
     }
     ->
     exec {['docker-sources']:
-        command => '/bin/echo "deb https://get.docker.io/ubuntu docker main" > /etc/apt/sources.list.d/docker.list',
+        command => '/bin/echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" > /etc/apt/sources.list.d/docker.list',
     }
     ->
     package {['lxc-docker']:
+        ensure => purged,
+    }
+    ->
+    package {['docker-engine']:
         ensure => present,
         require => Exec['apt-get update'],
     }
